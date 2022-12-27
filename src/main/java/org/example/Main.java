@@ -16,7 +16,7 @@ public class Main {
      */
     private static final int[] EMPTY_ARRAY = {};
 
-    public static int[] streams(int[] input) {
+    public int[] streams(int[] input) {
         return Optional.ofNullable(input).map(arr -> {
             if (arr.length != 0) {
                 int[] temporaryStorage = new int[2];
@@ -36,7 +36,7 @@ public class Main {
         }).orElse(EMPTY_ARRAY);
     }
 
-    public static int[] loops(int[] input) {
+    public int[] loops(int[] input) {
         int[] result = new int[2];
         if (input == null || input.length == 0)
             return EMPTY_ARRAY;
@@ -51,8 +51,5 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        int[] testArray = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, -11, -12, -13, -14, -15};
-        System.out.println("stream test: " + Arrays.toString(streams(testArray)));
-        System.out.println("loop test: " + Arrays.toString(loops(testArray)));
     }
 }
