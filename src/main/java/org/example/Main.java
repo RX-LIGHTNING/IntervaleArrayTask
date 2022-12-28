@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collector;
 import java.util.stream.IntStream;
 
 public class Main {
@@ -18,22 +19,22 @@ public class Main {
 
     public int[] streams(int[] input) {
         return Optional.ofNullable(input).map(arr -> {
-            if (arr.length != 0) {
-                int[] temporaryStorage = new int[2];
-                Arrays.stream(arr).forEach(
-                        num -> {
-                            if (num > 0) {
-                                temporaryStorage[0]++;
-                            } else {
-                                temporaryStorage[1] += num;
-                            }
-
-                        });
-                return temporaryStorage;
-            } else {
-                return null;
+            if (Arrays.equals(EMPTY_ARRAY,arr)){
+                return EMPTY_ARRAY;
             }
-        }).orElse(EMPTY_ARRAY);
+           return IntStream.of(arr)
+                    .boxed()
+                    .collect(Collector.of(() -> new int[2], (ints, i) -> {
+                                ints[0] += i > 0 ? 1 : 0;
+                                ints[1] += Math.min(i, 0);
+                            }, (resultArray, incomeArray) -> {
+                                resultArray[0] += incomeArray[0];
+                                resultArray[1] += incomeArray[1];
+                                return resultArray;
+                            }
+                    ));
+                }
+        ).orElse(EMPTY_ARRAY);
     }
 
     public int[] loops(int[] input) {
