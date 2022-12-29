@@ -3,10 +3,11 @@ package org.example;
 import org.example.entity.CarPart;
 import org.example.entity.impl.Door;
 import org.example.entity.impl.Frame;
-import org.example.entity.impl.UnknownPart;
 import org.example.entity.impl.Wheel;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 
 import static java.util.stream.Collectors.toMap;
@@ -16,35 +17,57 @@ public class Main {
      * Здесь мы пытаемся достать из списка автомобильных деталей строку, где описано назначение этой детали.
      */
 
-    static List<CarPart> carParts = Arrays.asList(new Door(),new Frame(), new Wheel());
-    static Map<String, CarPart> map = carParts.stream().collect(toMap(CarPart::getPartName, Function.identity()));
-    public String purposeByIf(String variant) {
-        if (variant.equals("Дверь")) {
-            return new Door().getPurpose();
-        } else if (variant.equals("Колесо")) {
-            return new Wheel().getPurpose();
-        } else if (variant.equals("Кузов")) {
-            return new Frame().getPurpose();
-        } else return "Не знаю такой детали";
-    }
+    private final static String UNKNOWN_PART = "Не знаю такой детали";
 
-    public String purposeBySwitch(String variant) {
-        switch (variant) {
-            case "Дверь":
-                return new Door().getPurpose();
-            case "Колесо":
-                return new Wheel().getPurpose();
-            case "Кузов":
-                return new Frame().getPurpose();
-            default:
-                return "Не знаю такой детали";
-        }
-    }
-    public String purposeByMap(String variant) {
-        return map.getOrDefault(variant,new UnknownPart()).getPurpose();
-    }
+    private final CarPart door = new Door("Дверь");
+    private final CarPart wheel = new Wheel("Колесо");
+    private final CarPart frame = new Frame("Кузов");
+
+
+    private final List<CarPart> carParts = List.of(door, wheel, frame);
+    private final Map<String, CarPart> map = carParts.stream().collect(toMap(CarPart::getPartName, Function.identity()));
 
     public static void main(String[] args) {
-        //Заполнение списка, ввиду отстутствия спринга
+
+    }
+
+    public String ifPurpose(String variant) {
+        String result = "";
+        if ("Дверь".equals(variant)) {
+            result = door.getPurpose();
+        } else if ("Колесо".equals(variant)) {
+            result = wheel.getPurpose();
+        } else if ("Кузов".equals(variant)) {
+            result = frame.getPurpose();
+        } else {
+            result = UNKNOWN_PART;
+        }
+        return result;
+    }
+
+    public String switchPurpose(String variant) {
+        String result = "";
+        switch (variant) {
+            case "Дверь":
+                result = door.getPurpose();
+                break;
+            case "Колесо":
+                result = wheel.getPurpose();
+                break;
+            case "Кузов":
+                result = frame.getPurpose();
+                break;
+            default:
+                result = "Не знаю такой детали";
+                break;
+        }
+
+        return result;
+    }
+
+    public String mapPurpose(String variant) {
+        return Optional.ofNullable(map.get(variant))
+                .map(CarPart::getPurpose)
+                .orElse(UNKNOWN_PART);
     }
 }

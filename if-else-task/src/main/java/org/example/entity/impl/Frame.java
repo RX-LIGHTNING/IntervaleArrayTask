@@ -3,7 +3,11 @@ package org.example.entity.impl;
 import org.example.entity.CarPart;
 
 public class Frame implements CarPart {
-    private final String partName = "Кузов";
+    private String partName;
+
+    public Frame(String partName) {
+        this.partName = partName;
+    }
 
     @Override
     public String getPurpose() {
@@ -12,5 +16,9 @@ public class Frame implements CarPart {
 
     public String getPartName() {
         return partName;
+    }
+
+    public void setPartName(String partName) {
+        this.partName = partName;
     }
 }
