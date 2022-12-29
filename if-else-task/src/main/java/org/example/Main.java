@@ -47,7 +47,7 @@ public class Main {
 
     public String switchPurpose(String variant) {
         String result = "";
-        switch (variant) {
+        switch (Optional.ofNullable(variant).orElse("")) {
             case "Дверь":
                 result = door.getPurpose();
                 break;
